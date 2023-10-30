@@ -18,6 +18,13 @@ read_dec_num_to_eax PROC
     push esi
     push ebx
 
+    ; Read the user number
+    push MAX_SIZE
+    push OFFSET user_input
+    push 0
+    call __read
+    add esp, 12
+
     ; Set global registers 
     mov esi, 0
     mov eax, 0
@@ -47,13 +54,6 @@ read_dec_num_to_eax ENDP
 
 _main PROC
     
-    ; Read the user number
-    push MAX_SIZE
-    push OFFSET user_input
-    push 0
-    call __read
-    add esp, 12
-
     ; Call custom function
     call read_dec_num_to_eax
 
