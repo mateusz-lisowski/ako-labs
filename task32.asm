@@ -54,9 +54,9 @@ read_dec_num_to_eax ENDP
 
 _main PROC
     
-    ; Call custom function
-    call read_dec_num_to_eax
-
+    ; Call read_dec_num_to_eax function
+    call read_dec_num_to_eax    
+    
     ; End of the program
     push 0
     call _ExitProcess@4
