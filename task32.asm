@@ -15,7 +15,8 @@ ten db 10                       ; Set 10 in memory for multiplication purposes
 .code
 
 read_dec_num_to_eax PROC
-    pusha
+    push esi
+    push ebx
 
     ; Set global registers 
     mov esi, 0
@@ -38,7 +39,8 @@ read_dec_num_to_eax PROC
         jmp convert
 
     finish:                         ; Finish function execution
-        popa
+        pop ebx
+        pop esi
         ret
 
 read_dec_num_to_eax ENDP
