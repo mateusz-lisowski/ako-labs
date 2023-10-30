@@ -11,7 +11,7 @@ public _main
 .code
 _main PROC
 
-    
+
 
     ; End of the program
     push 0
