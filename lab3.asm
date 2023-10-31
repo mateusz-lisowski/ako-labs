@@ -2,16 +2,126 @@
 .model flat
 
 extern _ExitProcess@4 : PROC
+extern __read : PROC
+extern __write : PROC
 
 public _main
 
-.data
+MAX_SIZE equ 12                 ; Set max size of the user number to 12 decimal chars
 
+.data
+user_input db MAX_SIZE dup (?)  ; Declare space for user input in memory
+decoder db '0123456789AB'       ; Declaring decoder
+ten db 10                       ; Set 10 in memory for multiplication purposes
+twelve dd 12
+magazyn db 8 dup (?)
+magazyn2 db 16 dup (0)
 
 .code
+
+read_dec_num_to_eax PROC
+    push esi
+    push ebx
+
+    ; Read the user number
+    push MAX_SIZE
+    push OFFSET user_input
+    push 0
+    call __read
+    add esp, 12
+
+    ; Set global registers 
+    mov esi, 0
+    mov eax, 0
+
+    ; Convert number from decimal to binary
+    convert:
+        mov bl, user_input[esi]     ; Read character to bl
+        inc esi                     ; At the same time increment esi (for you not to forget to change it later)
+
+        cmp bl, 10                  ; Compare bl to 10 (enter char) 
+        je finish                   ; If the char is entern, finish 
+
+        sub bl, 30H                 ; Convert ASCII codes for numbers to the actual number
+        movzx ebx, bl               ; Expand the number to whole ebx
+
+        mul TEN                     ; Multiply result by 10
+        add eax, ebx                ; Add newly find number to eax
+        
+        jmp convert
+
+    finish:                         ; Finish function execution
+        pop ebx
+        pop esi
+        ret
+
+read_dec_num_to_eax ENDP
+
+print_eax_twelve PROC
+    pusha
+
+    mov esi, 7
+
+convert:
+    mov edx, 0
+    div twelve
+
+    and edx, 0000000BH
+    mov bl, decoder[edx]
+
+    mov magazyn[esi], bl
+    sub esi, 1
+
+    cmp esi, 0
+    jne convert
+
+
+    mov esi, 7
+    mov edi, 15
+    mov cl, 2
+    mov ch, cl
+
+convert2:
+
+    mov bl, magazyn[esi]
+    mov magazyn2[edi], bl
+    sub esi, 1
+    sub edi, 1
+
+    cmp esi, 0
+    je end_loop
+    
+    sub ch, 1
+    cmp ch, 0
+    je write_space
+    jmp convert2
+
+write_space:
+
+    mov magazyn2[edi], ' '
+    sub edi, 1
+    mov ch, cl
+    jmp convert2
+
+end_loop:
+
+    push 16
+    push OFFSET magazyn2
+    push 1 
+    call __write 
+
+    add esp, 12
+
+    popa
+    ret
+print_eax_twelve ENDP
+
 _main PROC
-
-
+    
+    ; Call read_dec_num_to_eax function
+    call read_dec_num_to_eax    
+    ; Call print_eax_hex function
+    call print_eax_twelve
 
     ; End of the program
     push 0
