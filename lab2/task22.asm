@@ -24,14 +24,14 @@ content_utf16   dw 'K','a',017CH,'d','y',' ','z','n','a','k',' '
 _main PROC
 
     push 0                      ; MB_OK type of message box
-    push OFFSET title_win1250   ; Address of the window title (encodeing Win1250)
-    push OFFSET content_win1250 ; Address of the window content (encodeing Win1250)
+    push OFFSET title_win1250   ; Address of the window title (encoding Win1250)
+    push OFFSET content_win1250 ; Address of the window content (encoding Win1250)
     push 0                      ; NULL
     call _MessageBoxA@16
 
     push 0                      ; MB_OK type of message box
-    push OFFSET title_utf16     ; Address of the window title (encodeing Win1250)
-    push OFFSET content_utf16   ; Address of the window content (encodeing Win1250)
+    push OFFSET title_utf16     ; Address of the window title (encoding UTF-16)
+    push OFFSET content_utf16   ; Address of the window content (encoding UTF-16)
     push 0                      ; NULL
     call _MessageBoxW@16
 
