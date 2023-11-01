@@ -10,15 +10,15 @@ public _main
 .data
 
 title_win1250 db 'Tekst w standardzie Windows 1250', 0
-content_win1250 db 'Ka',0BFH,'dy znak zajmuje 8 bit',0F3H,'w', 0
+content_win1250 db 'Ka',0BFH,'dy znak zajmuje 8 bit',0F3H,'w', 0    ; Define polish sepcific characters with Win1250 encoding
 
 title_utf16     dw 'T','e','k','s','t',' ','w',' '
                 dw 'f','o','r','m','a','c','i','e',' '
                 dw 'U','T','F','-','1','6', 0
 
-content_utf16   dw 'K','a',017CH,'d','y',' ','z','n','a','k',' '
-                dw 'z','a','j','m','u','j','e',' '
-                dw '1','6',' ','b','i','t',0F3H,'w', 0
+content_utf16   dw 'K','a',017CH,'d','y',' ','z','n','a','k',' '    ; Define polish sepcific characters with UTF-16 encoding
+                dw 'z','a','j','m','u','j','e',' '  
+                dw '1','6',' ','b','i','t',0F3H,'w', 0              
 
 .code
 _main PROC
