@@ -43,6 +43,10 @@ _main PROC
 
         mov al, user_input[esi]     ; Move character from user_input to al
 
+        ; Change all polish specific characters to upper case
+        ; Read fuction saves them in Latin2 encoding
+        ; Write fuction writes them in Latin2 encoding
+        
         cmp al, 0A5H                ; Check for 'ą' character
         je change_a
 
