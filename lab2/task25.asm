@@ -46,7 +46,7 @@ _main PROC
         ; Change all polish specific characters to upper case
         ; Read fuction saves them in Latin2 encoding
         ; Write fuction writes them in Latin2 encoding
-        
+
         cmp al, 0A5H                ; Check for 'ą' character
         je change_a
 
@@ -81,7 +81,7 @@ _main PROC
         ja skip                     ; If yes, it does not need to be changed, so skip
 
         sub al, 20H                 ; Transform small letters into big ones
-        mov user_input[esi], al     ; Save transformed character to memory
+        jmp save                    ; Jump to save to write changed characters to memory
 
     change_a:                       ; Change 'ą' to 'Ą'
 
