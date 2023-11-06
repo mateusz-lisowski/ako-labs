@@ -11,7 +11,7 @@ MAX_SIZE equ 12                     ; Set max size of the user number to 12 deci
 
 .data
 user_input db MAX_SIZE dup (?)      ; Declare space for user input in memory
-eax_val dd 0                        ; Declare the eaz_val chunk of the memory
+eax_val dd 0                        ; Declare the eax_val chunk of the memory
 ten db 10                           ; Set 10 in memory for multiplication purposes
 
 .code
@@ -37,7 +37,7 @@ read_dec_num_to_eax PROC
         inc esi                     ; At the same time increment esi (for you not to forget to change it later)
 
         cmp bl, 10                  ; Compare bl to 10 (enter char) 
-        je finish                   ; If the char is entern, finish 
+        je finish                   ; If the char is enter, finish 
 
         sub bl, 30H                 ; Convert ASCII codes for numbers to the actual number
         movzx ebx, bl               ; Expand the number to whole ebx
