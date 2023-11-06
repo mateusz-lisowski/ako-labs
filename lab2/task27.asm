@@ -40,11 +40,13 @@ _main PROC
 
     ; Initialize registers
     mov ecx, eax                ; Move number of written characters (eax) to ecx
-    mov esi, 0                  ; Set esi to 0
+    mov esi, 0                  ; Set esi to 0 (esi controls user input)
+    mov edi, 0                  ; Set edi to 0 (edi controls output)
 
     convert:
 
         mov al, user_input[esi]     ; Move character from user_input to al
+        inc esi                     ; Increment esi to read next character next time
 
         ; Change all polish specific characters to upper case
         ; Read fuction saves them in Latin2 encoding
@@ -84,7 +86,7 @@ _main PROC
         ja skip                     ; If yes, it does not need to be changed, so skip
 
         sub al, 20H                 ; Transform small letters into big ones
-        movzx ax, al                ; Extend character from byte to word   
+        movzx ax, al                ; Extend character from byte to word (utf16 is same but on 16 bits) 
         jmp save                    ; Jump to save to write changed characters to memory
 
     change_a:                       ; Change 'ą' to 'Ą'
@@ -169,11 +171,11 @@ _main PROC
 
     save:                           
         
-        mov output_utf16[esi], ax     ; Save transformed character to memory
+        mov output_utf16[edi], ax     ; Save transformed character to memory
+        add edi, 2                    ; Add to edi size of word 
 
     skip: 
-    
-        inc esi                     ; Increment esi, as it is loop counter
+        
         cmp esi, ecx                ; Check if all characters have been read
         jne convert                 ; If no, continue the loop 
     
