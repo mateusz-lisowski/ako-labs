@@ -3,19 +3,20 @@
 
 extern __read : PROC
 
-STDIN equ 0
-
-INPUT_MAX_SIZE equ 8                     ; Set max size of the user number to 12 decimal chars
+STDIN equ 0             ; Set constants for STDIN
+INPUT_MAX_SIZE equ 8    ; Set max size of the user number to 8 decimal chars
 
 .data
 
-TEN db 10   ; Set 10 in memory for multiplication purposes
-
+TEN db 10                                 ; Set 10 in memory for multiplication purposes
 user_input db INPUT_MAX_SIZE dup (?)      ; Declare space for user input in memory
 
 .code
 
+; Fuction to read input given by user, convert it to decimal value and store it in EAX register
 read_dec_num_to_eax PROC
+    
+    ; Save registers state
     push ebx 
     push ecx 
     push edx
@@ -24,15 +25,15 @@ read_dec_num_to_eax PROC
     push ebp
 
     ; Read the user number
-    push INPUT_MAX_SIZE
-    push OFFSET user_input
-    push STDIN
-    call __read
-    add esp, 12
+    push INPUT_MAX_SIZE             ; Set max size of the user number
+    push OFFSET user_input          ; Set address of the user_input chunk in memory
+    push STDIN                      ; Take characters from STDIN
+    call __read                     ; Call read function from C
+    add esp, 12                     ; Free stack
 
     ; Set global registers 
-    mov esi, 0
-    mov eax, 0
+    mov esi, 0                      ; Set register for accessing user_input
+    mov eax, 0                      ; Set register to store result
 
     ; Convert number from decimal to binary
     convert:
@@ -51,6 +52,7 @@ read_dec_num_to_eax PROC
         jmp convert
 
     finish:                         ; Finish function execution
+        ; Restore registers state
         pop ebp 
         pop edi 
         pop esi 
