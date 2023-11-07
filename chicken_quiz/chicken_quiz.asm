@@ -3,6 +3,9 @@
 
 extern _ExitProcess@4 : PROC
 
+; Function for generating random number
+extern generate_random_number_to_eax_from_eax : PROC
+
 ; Custom function for reding user input
 extern read_dec_num_to_eax : PROC        
 
@@ -17,7 +20,11 @@ public _main
 
 _main PROC
 
-    mov ebx, 10                         ; Set the start number of the chickens
+    mov eax, 100 
+    call generate_random_number_to_eax_from_eax
+    add esp, 4
+
+    mov ebx, eax                         ; Set the start number of the chickens
 
     ; Main loop of the program
     guess:
