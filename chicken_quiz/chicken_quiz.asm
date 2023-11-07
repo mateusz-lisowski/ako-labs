@@ -3,11 +3,13 @@
 
 extern _ExitProcess@4 : PROC
 
-exten read_dec_num_to_eax : PROC
-exten print_to_many_chikens : PROC
-exten print_to_little_chikens : PROC
-exten print_congrats : PROC
+; Custom function for reding user input
+exten read_dec_num_to_eax : PROC        
 
+; Custom functions for showing user proper communicate
+exten print_to_many_chikens : PROC      
+exten print_to_few_chikens : PROC
+exten print_congrats : PROC
 
 public _main
 
@@ -15,26 +17,30 @@ public _main
 
 _main PROC
 
-    mov ebx, 10                 ; Set the start number of the chickens
+    mov ebx, 10                         ; Set the start number of the chickens
 
+    ; Main loop of the program
     guess:
         
-        call read_dec_num_to_eax    ; Read user guess
-        cmp eax, ebx
-        ja too_many_chickens
-        jb too_little_chickens
-        jmp found
+        call read_dec_num_to_eax        ; Read user guess and store its value to EAX
+        cmp eax, ebx                    ; Check if value is the same as the given chickens number
+        ja too_many_chickens            ; Jump if guess was bigger than the number of chickens
+        jb too_little_chickens          ; Jump if guess was smaller than the number of chickens
+        jmp found                       ; Else number of chicken was found
 
+    ; Guess was bigger than the number of chickens
     too_many_chickens:
-        call print_to_many_chikens
-        jmp guess
+        call print_to_many_chikens      ; Print proper communicate
+        jmp guess                       ; Jump to ask onece again
 
+    ; Guess was smaller than the number of chickens
     too_little_chickens:
-        call print_to_little_chikens
-        jmp guess
+        call print_to_little_chikens    ; Print proper communicate
+        jmp guess                       ; Jump to ask onece again 
 
+    ; Guessed properly
     found:
-        call print_congrats
+        call print_congrats             ; Print congratulations communicate
 
     ; End program
     push 0
