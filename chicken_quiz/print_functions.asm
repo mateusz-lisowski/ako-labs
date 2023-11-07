@@ -28,7 +28,7 @@ print_congrats PROC
 print_congrats ENDP
 
 ; Print when guessed too many chickens
-print_to_many_chikens PROC
+print_to_many_chickens PROC
     pusha                       ; Save registers state
 
     push LENGTHOF too_much      ; Calculate size of too_much
@@ -39,20 +39,20 @@ print_to_many_chikens PROC
 
     popa                        ; Restore registers state
     ret                         ; Return from the function
-print_to_many_chikens ENDP
+print_to_many_chickens ENDP
 
 ; Print when user guessed too few chickens
-print_to_few_chikens PROC
+print_to_few_chickens PROC
     pusha                       ; Save registers state
 
-    push LENGTHOF too_little    ; Calculate size of too_little
-    push OFFSET too_little      ; Set too_little label as place to start writing
+    push LENGTHOF too_few       ; Calculate size of too_few
+    push OFFSET too_few         ; Set too_few label as place to start writing
     push STDOUT                 ; Set out to stdout 
     call __write                ; Call write function from C library
     add esp, 12                 ; Reset write function parameters
 
     popa                        ; Restore registers state
     ret                         ; Return from the function
-print_to_few_chikens ENDP
+print_to_few_chickens ENDP
 
 END

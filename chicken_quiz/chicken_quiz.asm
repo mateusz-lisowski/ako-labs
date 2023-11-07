@@ -4,12 +4,12 @@
 extern _ExitProcess@4 : PROC
 
 ; Custom function for reding user input
-exten read_dec_num_to_eax : PROC        
+extern read_dec_num_to_eax : PROC        
 
 ; Custom functions for showing user proper communicate
-exten print_to_many_chikens : PROC      
-exten print_to_few_chikens : PROC
-exten print_congrats : PROC
+extern print_to_many_chickens : PROC      
+extern print_to_few_chickens : PROC
+extern print_congrats : PROC
 
 public _main
 
@@ -30,12 +30,12 @@ _main PROC
 
     ; Guess was bigger than the number of chickens
     too_many_chickens:
-        call print_to_many_chikens      ; Print proper communicate
+        call print_to_many_chickens     ; Print proper communicate
         jmp guess                       ; Jump to ask onece again
 
     ; Guess was smaller than the number of chickens
     too_little_chickens:
-        call print_to_little_chikens    ; Print proper communicate
+        call print_to_few_chickens      ; Print proper communicate
         jmp guess                       ; Jump to ask onece again 
 
     ; Guessed properly
