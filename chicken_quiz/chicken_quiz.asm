@@ -4,7 +4,7 @@
 extern _ExitProcess@4 : PROC
 
 ; Function for generating random number
-extern generate_random_number_to_eax_from_eax : PROC
+extern generate_random_number : PROC
 
 ; Custom function for reding user input
 extern read_dec_num_to_eax : PROC        
@@ -20,9 +20,10 @@ public _main
 
 _main PROC
 
-    mov eax, 100 
-    call generate_random_number_to_eax_from_eax
-    add esp, 4
+    ; Call custom function to generate random number from 0-100
+    push 100                             ; Push max value as an argument
+    call generate_random_number          ; Call custom function to generate random number
+    add esp, 4                           ; Clear the stack
 
     mov ebx, eax                         ; Set the start number of the chickens
 
