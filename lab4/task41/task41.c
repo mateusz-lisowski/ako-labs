@@ -1,17 +1,17 @@
 #include <stdio.h>
 
 
-int find_max (int x, int y, int z);
+extern int find_max (int a, int b, int c, int d);
 
 
 int main()
 {
-    int x, y, z;
+    int a, b, c, d;
 
     printf("Enter any three signed numbers: ");
-    scanf_s("%d %d %d", &x, &y, &z, 32);
+    scanf_s("%d %d %d %d", &a, &b, &c, &d, 32);
 
-    int result = find_max(x, y, z);
+    int result = find_max(a, b, c, d);
     printf("\nNumber %d is the biggest\n", result);
     
     return 0;
