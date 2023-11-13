@@ -10,6 +10,8 @@ _find_max PROC
     push ebp
     mov ebp, esp
 
+    push ebx
+
     mov eax, [ebp + 8]  ; Max
     
     mov esi, 12
@@ -32,6 +34,7 @@ _find_max PROC
         cmp ecx, 0
         jne lp
 
+    pop ebx
     pop ebp
     ret
 
