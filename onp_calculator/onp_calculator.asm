@@ -9,8 +9,7 @@ extern __write : PROC
 extern __read : PROC
 
 ; Import custom functions
-extern calculate_onp
-
+extern calculate_onp : PROC
 
 public _main
 
