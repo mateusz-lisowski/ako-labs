@@ -10,6 +10,7 @@ extern __read : PROC
 
 ; Import custom functions
 extern calculate_onp : PROC
+extern print_eax : PROC
 
 public _main
 
@@ -57,6 +58,8 @@ _main PROC
     push OFFSET formula     ; Pointer to formula place in memory
     call calculate_onp      ; Call calculate_onp custom function
     add esp, 4              ; Deallocate memory from one arguments
+
+    call print_eax          ; Show value of EAX after calculation
 
     ; End program
     push 0
