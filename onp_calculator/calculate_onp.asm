@@ -43,6 +43,53 @@ is_operand PROC
 
 is_operand ENDP
 
+change_to_decimal PROC
+
+    ; Standard function prolog
+    push ebp            ; Save EBP on stack
+    mov ebp, esp        ; Move current value of ESP to EPB
+
+    ; Rerserve place for one local variable
+    sub esp, 4
+
+    ; 10 is our local variable
+    mov [ebp - 1], 10
+
+    ; Save used registers
+    push ebx
+    push esi
+
+    ; Save pointer to formula in EBX
+    mov ebx, [ebp + 8]
+
+    ; Set global registers 
+    mov esi, 0
+    mov eax, 0
+
+    convert:
+        mov dl, [ebx + esi]         ; Read character to bl
+        inc esi                     ; At the same time increment esi (for you not to forget to change it later)
+
+        cmp dl, ' '                  ; Compare bl to space (enter char) 
+        je finish                   ; If the char is entern, finish 
+
+        sub dl, 30H                 ; Convert ASCII codes for numbers to the actual number
+        movzx edx, dl               ; Expand the number to whole ebx
+
+        mul [ebp - 1]               ; Multiply result by 10
+        add eax, edx                ; Add newly find number to eax
+        
+        jmp convert
+
+    finish:                         ; Finish function execution
+
+    ; Standard function epilog
+    pop ebp             ; Restore EBP from stack
+    ret                 ; Return to current value of ESP
+
+change_to_decimal ENDP
+
+
 ; Function for calcultating ONP
 calculate_onp PROC
     
@@ -72,7 +119,11 @@ calculate_onp PROC
         cmp eax, 1
         je char_is_operand
 
-        push edx
+        push ebx
+        call change_to_decimal
+        add esp, 4
+
+        push eax
         jmp calculate
 
     char_is_operand:
@@ -92,4 +143,21 @@ calculate_onp PROC
     ret                 ; Return to current value of ESP
 
 calculate_onp ENDP
+
+print_eax PROC
+    pusha                   ; Save registers state
+
+    sub esp, 4
+    mov [ebp - 1]
+
+    push 8                  ; Set size of write to 8 bytes (32 bits)
+    push [ebp - 1]          ; Set eax_val label as place to start writing
+    push 1                  ; Set out to stdout 
+    call __write            ; Call write function from C library
+
+    add esp, 12             ; Reset write function parameters
+    popa                    ; Restore registers state
+    ret                     ; Go back to executing code
+print_eax ENDP
+
 END
