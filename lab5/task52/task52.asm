@@ -3,7 +3,12 @@
 
 public _func
 
-CON_LENGTH equ 20
+CON_LENGTH equ 3        ; Number of conjuction values to be calculated
+
+.data
+
+eax_val dd ?            ; Place to store value of EAX register
+current_sum dd 0        ; Place to store current value of the conjuction sum
 
 .code
 
@@ -11,13 +16,13 @@ CON_LENGTH equ 20
 calculate_exp PROC
 
     ; Function prolog
-    push ebp                ; Save value of EBP on the stack
-    mov ebp, esp            ; Move value of ESP to EBP
+    push ebp                    ; Save value of EBP on the stack
+    mov ebp, esp                ; Move value of ESP to EBP
 
     ; Move function arguments to registers
-    mov ecx, [ebp + 12]      ; Exponent of the result
+    mov ecx, [ebp + 12]         ; Exponent of the result
 
-    fld dword PTR [ebp + 8]     ; Load value to raise to the top of the stack
+    fld dword PTR [ebp + 8]    ; Load value to raise to the top of the stack
 
     ; Multiply top of the stack ECX - 1 times
     lp:
@@ -84,11 +89,50 @@ _func PROC
     push ebp                ; Save value of EBP on the stack
     mov ebp, esp            ; Move value of ESP to EBP
 
-    mov ecx, CON_LENGTH     ; Move length of conjunction to ECX
+    ; Save used registers state
+    push ebx
+
+    ; Set registers used by function
+    mov esi, CON_LENGTH     ; Move length of conjunction to ESI (ESI has to be preserved by subprograms)
+    mov ebx, 1              ; First we raise to the power of 1
 
     lp:
 
-        push [ebp + 8]      ; Argument 
+        ; Calculate x to power of EBX
+        push ebx                        ; Argument is an exponent to raise x to
+        push [ebp + 8]                  ; Argument is same as for func (x)
+        call calculate_exp              ; Call custom calculate_exp function
+        add esp, 8                      ; Deallocate arguments from stack
+
+        ; Result is on the top of the coprocessor stack
+
+        ; Calculate factorial of EBX
+        push ebx                        ; Argument for calculate_factorial is current state of EBX     
+        call calculate_factorial        ; Call custom calculate_factorial function
+        add esp, 4                      ; Deallocate arguments from stack
+
+        ; Result is in EAX
+
+        mov dword PTR eax_val, eax    ; Save value returned from function to EAX
+
+        ; Calculate current conjunction value
+        fidiv dword PTR eax_val        ; Divide by value stored under eax_val label
+        fadd dword PTR current_sum    ; Add result of division to the current sum
+        fstp dword PTR current_sum    ; Replece old sum with the new sum
+
+        inc ebx         ; Increment EBX  
+        dec esi         ; Decrease loop counter
+
+        cmp esi, 0      ; Check if loop ends
+        jne lp          ; If not continue looping
+
+    ; Add first conjunction value
+    fld1                            ; Load 1 to the top of the coprocessor stack
+    fld dword PTR current_sum       ; Load current_sum to the stack
+    faddp st(1), st(0)              ; Add two top numbers from the stack and place result on the top
+
+    ; Restore registers state    
+    pop ebx
 
     ; Function epilog
     pop ebp
