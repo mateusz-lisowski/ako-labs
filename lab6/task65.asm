@@ -16,14 +16,16 @@ linia PROC
     push ax
     push bx
     push es
+
     mov ax, 0A000H ; adres pamięci ekranu dla trybu 13H
     mov es, ax
+
     mov bx, cs:adres_piksela ; adres bieżący piksela
     mov al, cs:kolor
     mov es:[bx], al ; wpisanie kodu koloru do pamięci ekranu
 
     ; przejście do następnego wiersza na ekranie
-    add bx, 320
+    add bx, 321
 
     ; sprawdzenie czy cała linia wykreślona
     cmp bx, 320*200
@@ -40,6 +42,7 @@ linia PROC
     dalej:
 
     mov cs:adres_piksela, bx
+
     ; odtworzenie rejestrów
     pop es
     pop bx
