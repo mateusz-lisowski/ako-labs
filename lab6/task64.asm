@@ -50,7 +50,7 @@ wyswietl_AL ENDP
 
 przerwanie PROC
 
-        ; przechowanie używanych rejestrów
+    ; przechowanie używanych rejestrów
     push ax
     push bx
     push es
@@ -89,6 +89,7 @@ przerwanie PROC
 
     ; skok do oryginalnej procedury obsługi przerwania zegarowego
     jmp dword PTR cs:wektor9
+
     ; dane programu ze względu na specyfikę obsługi przerwań
     ; umieszczone są w segmencie kodu
     licznik dw 320 ; wyświetlanie począwszy od 2. wiersza
@@ -100,7 +101,6 @@ przerwanie ENDP
 ; program główny - instalacja i deinstalacja procedury
 ; obsługi przerwań
 ; ustalenie strony nr 0 dla trybu tekstowego
-
 zacznij:
 
     mov al, 0
@@ -108,6 +108,7 @@ zacznij:
     int 10
     mov ax, 0
     mov ds,ax ; zerowanie rejestru DS
+
     ; odczytanie zawartości wektora nr 9 i zapisanie go
     ; w zmiennej 'wektor9' (wektor nr 9 zajmuje w pamięci 4 bajty
     ; począwszy od adresu fizycznego 9 * 4 = 36)
@@ -126,25 +127,31 @@ zacznij:
 
 ; oczekiwanie na naciśnięcie klawisza 'x'
 aktywne_oczekiwanie:
+
     mov ah,1
     int 16H
     ; funkcja INT 16H (AH=1) BIOSu ustawia ZF=1 jeśli
     ; naciśnięto jakiś klawisz
+
     jz aktywne_oczekiwanie
+
     ; odczytanie kodu ASCII naciśniętego klawisza (INT 16H, AH=0)
     ; do rejestru AL
     mov ah, 0
     int 16H
     cmp al, 'x' ; porównanie z kodem litery 'x'
     jne aktywne_oczekiwanie ; skok, gdy inny znak
+
     ; deinstalacja procedury obsługi przerwania zegarowego
     ; odtworzenie oryginalnej zawartości wektora nr 9
     mov eax, cs:wektor9
     cli
     mov ds:[36], eax ; przesłanie wartości oryginalnej
+
     ; do wektora 9 w tablicy wektorów
     ; przerwań
     sti
+    
     ; zakończenie programu
     mov al, 0
     mov ah, 4CH
