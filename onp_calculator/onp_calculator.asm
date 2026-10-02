@@ -4,7 +4,7 @@
 ; Import win32 api functions 
 extern _ExitProcess@4 : PROC
 
-; Import c functons
+; Import c functions
 extern __write : PROC
 extern __read : PROC
 
@@ -59,7 +59,8 @@ _main PROC
     call calculate_onp      ; Call calculate_onp custom function
     add esp, 4              ; Deallocate memory from one arguments
 
-    call print_eax          ; Show value of EAX after calculation
+    ; Show value of EAX after calculation
+    call print_eax          ; Call print_eax custom function 
 
     ; End program
     push 0

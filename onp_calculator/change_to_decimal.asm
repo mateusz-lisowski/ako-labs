@@ -41,6 +41,12 @@ change_to_decimal PROC
         jmp convert                 ; Continue converting
 
     finish:                         ; Finish function execution
+    
+    mov edx, esi                    ; Return pointer shift in edx
+
+    ; Restore global registers
+    pop esi
+    pop ebx
 
     ; Standard function epilog
     pop ebp             ; Restore EBP from stack
